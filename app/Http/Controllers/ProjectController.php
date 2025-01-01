@@ -32,10 +32,13 @@ class ProjectController extends Controller
 
         $projects = $query->orderBy($sortField, $sortDirection)->paginate(10);
 
+        $errorMessage = session('error');
+
         return inertia("Project/Index", [
             "projects" => ProjectResource::collection($projects),
             'queryParams' => request()->query() ?: null,
             'success' => session('success'),
+            'errorMessage' => $errorMessage
         ]);
     }
 

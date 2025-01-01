@@ -52,6 +52,7 @@ class UserController extends Controller
         $data = $request->validated();
         $data['email_verified_at'] = time(); //(NEEDS UPDATE)
         $data['password'] = bcrypt($data['password']);
+        $data['role'] = $request->input('role', 'user'); // Default to 'user' if no role is provided
 
         User::create($data);
 
@@ -82,6 +83,7 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         $data = $request->validated();
+        $data['role'] = $request->input('role', $user->role); // Retain current role if not provided
         $password = $data['password'] ?? null;
         if ($password) {
             $data['password'] = bcrypt($password);

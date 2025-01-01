@@ -22,6 +22,8 @@ class DashboardController extends Controller
         $activeTasks = Task::query()->whereIn('status', ['pending', 'in_progress'])->where('assigned_user_id', $user->id)->limit(10)->get();
         $activeTasks = TaskResource::collection($activeTasks);
 
+        $errorMessage = session('error');
+
         return inertia('Dashboard', compact(
             'totalPendingTasks', 
             'myPendingTasks', 
@@ -29,7 +31,8 @@ class DashboardController extends Controller
             'myProgressTasks', 
             'totalCompletedTasks', 
             'myCompletedTasks',
-            'activeTasks'
+            'activeTasks',
+            'errorMessage'
         ));
     }
 }

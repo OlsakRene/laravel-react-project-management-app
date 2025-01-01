@@ -5,8 +5,11 @@ import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constants";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
 import TableHeading from "@/Components/TableHeading";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from 'react';
 
-export default function Index({ auth, projects, queryParams = null, success }) {
+export default function Index({ auth, projects, queryParams = null, success, errorMessage }) {
     queryParams = queryParams || {}
     const searchFieldChanged = (name, value) => {
         if (value) {
@@ -47,6 +50,18 @@ export default function Index({ auth, projects, queryParams = null, success }) {
         }
     }
 
+    useEffect(() => {
+        if (errorMessage) {
+            toast.error(errorMessage, {
+                autoClose: 5000, // Optional: Auto close after 5 seconds
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                progress: undefined,
+            });
+        }
+    }, [errorMessage]);
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -55,15 +70,20 @@ export default function Index({ auth, projects, queryParams = null, success }) {
                     <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                     Projects
                     </h2>
+
+                    {/* Only show to admins */}
+                    {auth.user.role === 'admin' &&
                     <Link href={route("project.create")} className="bg-emerald-500 py-1 px-3 text-white rounded shadow transition-all hover:bg-emerald-600">
                         Add new
                     </Link>
+                    }
                 </div>                
             }
         >
             <Head title="Projects" />
                 
                 <div className="py-12">
+                    <ToastContainer /> {/* Toast container */} 
                     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                         {/* Success message */}
                         {success && (
@@ -96,7 +116,12 @@ export default function Index({ auth, projects, queryParams = null, success }) {
                                                     Due date
                                                 </TableHeading>
                                                 <th className="px-3 py-3">Created By</th>
+
+                                                {/* Only show to admins */}
+                                                {auth.user.role === 'admin' &&
                                                 <th className="px-3 py-3 text-right">Actions</th>
+                                                }
+
                                             </tr>
                                         </thead>
                                         <thead className="text-xs text-gray-700 uppercase bg-gray-500 dark:bg-gray700 dark:text-gray-400 border-b-2 border-gray-400">
@@ -127,7 +152,11 @@ export default function Index({ auth, projects, queryParams = null, success }) {
                                                 <th className="px-3 py-3"> </th>
                                                 <th className="px-3 py-3"> </th>
                                                 <th className="px-3 py-3"> </th>
+
+                                                {/* Only show to admins */}
+                                                {auth.user.role === 'admin' &&
                                                 <th className="px-3 py-3"></th>
+                                                }
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -153,6 +182,9 @@ export default function Index({ auth, projects, queryParams = null, success }) {
                                                     <td className="px-3 py-2 text-nowrap">{project.created_at}</td>
                                                     <td className="px-3 py-2 text-nowrap">{project.due_date}</td>
                                                     <td className="px-3 py-2">{project.createdBy.name}</td>
+
+                                                    {/* Only show to admins */}
+                                                    {auth.user.role === 'admin' &&
                                                     <td className="px-3 py-2">
                                                         <Link href={route('project.edit', project.id)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1">
                                                             Edit
@@ -161,6 +193,8 @@ export default function Index({ auth, projects, queryParams = null, success }) {
                                                             Delete
                                                         </button>
                                                     </td>
+                                                    }
+
                                                 </tr>
                                             ))}                                            
                                         </tbody>

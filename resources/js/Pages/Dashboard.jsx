@@ -1,6 +1,9 @@
 import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from '@/constants';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from 'react';
 
 export default function Dashboard({ 
     auth, 
@@ -10,8 +13,21 @@ export default function Dashboard({
     myProgressTasks,
     totalCompletedTasks, 
     myCompletedTasks,
-    activeTasks
+    activeTasks,
+    errorMessage
 }) {
+    useEffect(() => {
+        if (errorMessage) {
+            toast.error(errorMessage, {
+                autoClose: 5000, // Optional: Auto close after 5 seconds
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                progress: undefined,
+            });
+        }
+    }, [errorMessage]);
+
     return (
         <AuthenticatedLayout
             user={auth.user}
@@ -22,8 +38,8 @@ export default function Dashboard({
             }
         >
             <Head title="Dashboard" />
-
-            <div className="py-12">
+            <div className="py-12">   
+                <ToastContainer /> {/* Toast container */}             
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8 grid grid-cols-3 gap-2">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">
                         <div className="p-6 text-gray-900 dark:text-gray-100">

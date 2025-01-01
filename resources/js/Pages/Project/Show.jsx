@@ -12,9 +12,13 @@ export default function Show({auth, project, success, tasks, queryParams}) {
                     <h2 className="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200">
                         {`Project "${project.name}"`}
                     </h2>
+                    
+                    {/* Only show to admins */}
+                    {auth.user.role === 'admin' &&
                     <Link href={route('project.edit', project.id)} className="font-medium text-blue-600 dark:text-blue-500 hover:underline mx-1">
                         Edit
                     </Link>
+                    }
                 </div>
             }
         >

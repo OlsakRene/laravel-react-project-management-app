@@ -1,5 +1,6 @@
 import InputError from "@/Components/InputError";
 import InputLabel from "@/Components/InputLabel";
+import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, useForm } from "@inertiajs/react";
@@ -10,6 +11,7 @@ export default function Edit({ auth, user }) {
         email: user.email || '',
         password: '',
         password_confirmation: '',
+        role: user.role || '',
         _method: 'PUT'
     });
 
@@ -36,6 +38,20 @@ export default function Edit({ auth, user }) {
                         <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg dark:bg-gray-800">                            
                             <form onSubmit={onSubmit} className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg">
 
+                                <div className="mt-4">
+                                    <InputLabel htmlFor="user_role" value="Role" />
+                                    <SelectInput  
+                                        id="user_role"
+                                        name="role"
+                                        value={data.role}
+                                        className="mt-1 block w-full"
+                                        onChange={e => setData('role', e.target.value)}
+                                    >
+                                        <option value="user">User</option>
+                                        <option value="admin">Admin</option>
+                                    </SelectInput>
+                                    <InputError message={errors.role} className="mt-2" />
+                                </div>
                                 <div className="mt-4">
                                     <InputLabel htmlFor="user_name" value="User Name" />
                                     <TextInput  

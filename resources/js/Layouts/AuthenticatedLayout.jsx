@@ -42,19 +42,21 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     All Tasks
                                 </NavLink>
+                                {user.role === 'admin' &&
                                 <NavLink
                                     href={route('user.index')}
                                     active={route().current('user.index')}
                                 >
                                     Users
                                 </NavLink>
+                                }
                                 <NavLink
-                                    href={route('task.myTasks')}
-                                    active={route().current('task.myTasks')}
+                                href={route('task.myTasks')}
+                                active={route().current('task.myTasks')}
                                 >
                                     My Tasks
-                                </NavLink>
-                            </div>
+                                </NavLink>                              
+                        </div>
                         </div>
 
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
